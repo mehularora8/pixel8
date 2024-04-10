@@ -187,7 +187,7 @@ def double_thresholding(img, high, low):
     weak_edges = np.zeros(img.shape, dtype=bool)
 
     strong_edges = (img >= high)
-    weak_edges = (img < high) & (img >= low
+    weak_edges = (img < high) & (img >= low)
 
     return strong_edges, weak_edges
 

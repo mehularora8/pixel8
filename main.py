@@ -9,7 +9,7 @@ from skimage.color import rgb2gray
 
 from PIL import Image
 
-def create_pixel_line_art(image_path):
+def create_pixel_line_art(image_path, pixelation_factor):
     """
     This is the implementation of a canny edge detector on
     an image. Creates a black and white edge detection, 
@@ -20,8 +20,8 @@ def create_pixel_line_art(image_path):
 
     kernel_size=5
     sigma=1.2
-    high=0.03
-    low=0.025
+    high=0.03 * pixelation_factor
+    low=0.025 * pixelation_factor
     
     kernel = gaussian_kernel(kernel_size, sigma)
     
@@ -67,9 +67,10 @@ def pixelate_bool(image_array, scale_down_factor):
     
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: python script.py image_path")
+    if len(sys.argv) != 3:
+        print("Usage: python script.py image_path pixelation_factor")
         sys.exit(1)
 
     image_path = sys.argv[1]
-    create_pixel_line_art(image_path)
+    pixelation_factor = float(sys.argv[2])
+    create_pixel_line_art(image_path, pixelation_factor)

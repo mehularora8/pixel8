@@ -1,2 +1,2 @@
-skimage
+scikit-image # to install skimage
 matplotlib

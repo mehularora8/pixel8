@@ -1,12 +1,7 @@
 import numpy as np
 
 def conv(image, kernel):
-    """ An implementation of convolution filter.
-
-    This function uses element-wise multiplication and np.sum()
-    to efficiently compute weighted sum of neighborhood at each
-    pixel.
-
+    """
     Args:
         image: numpy array of shape (Hi, Wi).
         kernel: numpy array of shape (Hk, Wk).
@@ -18,16 +13,12 @@ def conv(image, kernel):
     Hk, Wk = kernel.shape
     out = np.zeros((Hi, Wi))
 
-    # For this assignment, we will use edge values to pad the images.
-    # Zero padding will make derivatives at the image boundary very big,
-    # whereas we want to ignore the edges at the boundary.
     pad_width0 = Hk // 2
     pad_width1 = Wk // 2
     pad_width = ((pad_width0,pad_width0),(pad_width1,pad_width1))
-    # This variable was 'padded' before. 
+
     image = np.pad(image, pad_width, mode='edge')
 
-    ### YOUR CODE HERE
     new_height, new_width = image.shape
     
     kernel = np.flip(kernel)
@@ -40,19 +31,11 @@ def conv(image, kernel):
             neighbourhood = image[x - kernel_height : x + kernel_height + 1, y - kernel_width : y + kernel_width + 1]
             
             out[x - kernel_height, y - kernel_width] = np.sum(np.multiply(neighbourhood, kernel))
-    ### END YOUR CODE
 
     return out
 
 def gaussian_kernel(size, sigma):
-    """ Implementation of Gaussian Kernel.
-
-    This function follows the gaussian kernel formula,
-    and creates a kernel matrix.
-
-    Hints:
-    - Use np.pi and np.exp to compute pi and exp.
-
+    """
     Args:
         size: int of the size of output matrix.
         sigma: float of sigma to calculate kernel.
@@ -63,21 +46,16 @@ def gaussian_kernel(size, sigma):
 
     kernel = np.zeros((size, size))
 
-    ### YOUR CODE HERE
     k = size // 2
     sq_sig = np.square(sigma)
     for i in range(size):
         for j in range(size):
             kernel[i, j] = np.exp(-(np.square(i - k) + np.square(j - k)) / (2 * sq_sig)) / (2 * np.pi * sq_sig)
-    ### END YOUR CODE
 
     return kernel
 
 def partial_x(img):
     """ Computes partial x-derivative of input img.
-
-    Hints:
-        - You may use the conv function in defined in this file.
 
     Args:
         img: numpy array of shape (H, W).
@@ -87,19 +65,14 @@ def partial_x(img):
 
     out = None
 
-    ### YOUR CODE HERE
     x_filter = np.array([[0.5, 0, -0.5]])
     
     out = conv(img, x_filter)
-    ### END YOUR CODE
 
     return out
 
 def partial_y(img):
     """ Computes partial y-derivative of input img.
-
-    Hints:
-        - You may use the conv function in defined in this file.
 
     Args:
         img: numpy array of shape (H, W).
@@ -107,19 +80,14 @@ def partial_y(img):
         out: y-derivative image.
     """
 
-    out = None
-
-    ### YOUR CODE HERE
     y_filter = np.array([[0.5], [0], [-0.5]])
     
     out = conv(img, y_filter)
-    ### END YOUR CODE
 
     return out
 
 def gradient(img):
-    """ Returns gradient magnitude and direction of input img.
-
+    """
     Args:
         img: Grayscale image. Numpy array of shape (H, W).
 
@@ -128,14 +96,10 @@ def gradient(img):
             Numpy array of shape (H, W).
         theta: Direction(in degrees, 0 <= theta < 360) of gradient
             at each pixel in img. Numpy array of shape (H, W).
-
-    Hints:
-        - Use np.sqrt and np.arctan2 to calculate square root and arctan
     """
     G = np.zeros(img.shape)
     theta = np.zeros(img.shape)
 
-    ### YOUR CODE HERE
     filtered_x = partial_x(img)
     filtered_y = partial_y(img)
     
@@ -144,17 +108,12 @@ def gradient(img):
     theta = (np.rad2deg(np.arctan2(filtered_y, filtered_x)) + 180) % 360
     # Angles are needed clockwise. 
     # Phase of tan is 180
-    ### END YOUR CODE
 
     return G, theta
 
 
 def non_maximum_suppression(G, theta):
-    """ Performs non-maximum suppression.
-
-    This function performs non-maximum suppression along the direction
-    of gradient (theta) on the gradient magnitude image (G).
-
+    """
     Args:
         G: gradient magnitude image with shape of (H, W).
         theta: direction of gradients with shape of (H, W).
@@ -169,7 +128,7 @@ def non_maximum_suppression(G, theta):
     theta = np.floor((theta + 22.5) / 45) * 45
 
     #print(G)
-    ### BEGIN YOUR CODE
+
     for i in range(H):
         for j in range(W):
             direction = theta[i, j]
@@ -205,8 +164,6 @@ def non_maximum_suppression(G, theta):
                 out[i, j] = G[i, j]
             else:
                 out[i, j] = 0
-                
-    ### END YOUR CODE
 
     return out
 
@@ -229,10 +186,8 @@ def double_thresholding(img, high, low):
     strong_edges = np.zeros(img.shape, dtype=bool)
     weak_edges = np.zeros(img.shape, dtype=bool)
 
-    ### YOUR CODE HERE
     strong_edges = (img >= high)
-    weak_edges = (img < high) & (img >= low)
-    ### END YOUR CODE
+    weak_edges = (img < high) & (img >= low
 
     return strong_edges, weak_edges
 
@@ -267,11 +222,6 @@ def get_neighbors(y, x, H, W):
 def link_edges(strong_edges, weak_edges):
     """ Find weak edges connected to strong edges and link them.
 
-    Iterate over each pixel in strong_edges and perform breadth first
-    search across the connected pixels in weak_edges to link them.
-    Here we consider a pixel (a, b) is connected to a pixel (c, d)
-    if (a, b) is one of the eight neighboring pixels of (c, d).
-
     Args:
         strong_edges: binary image of shape (H, W).
         weak_edges: binary image of shape (H, W).
@@ -289,8 +239,7 @@ def link_edges(strong_edges, weak_edges):
     weak_edges = np.copy(weak_edges)
     edges = np.copy(strong_edges)
     
-    ### YOUR CODE HERE
-    seen = set() # Set of tuples (i, j)
+    seen = set()
     queue = []
     
     for i in range(H):
@@ -312,6 +261,5 @@ def link_edges(strong_edges, weak_edges):
                 queue.append(n)
                 
         seen.add(coord)
-    ### END YOUR CODE
 
     return edges

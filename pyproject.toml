@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pixel8"
+version = "1.0.0"
+description = "Generate pixel art from images using Canny edge detection"
+readme = "README.md"
+license = "MIT"
+authors = [
+    {name = "Mehul Arora", email = "aroramehul8@gmail.com"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+        "Intended Audience :: End Users/Desktop",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+keywords = ["pixel-art", "image-processing", "canny-edge-detection", "computer-vision"]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.19.0",
+    "matplotlib>=3.3.0",
+    "scikit-image>=0.18.0",
+    "Pillow>=8.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black>=22.0",
+    "flake8>=4.0",
+    "mypy>=0.910"
+]
+
+[project.urls]
+Homepage = "https://github.com/mehularora8/pixel8"
+Repository = "https://github.com/mehularora8/pixel8"
+Issues = "https://github.com/mehularora8/pixel8/issues"
+
+[project.scripts]
+pixel8 = "pixel8.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pixel8*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true 

@@ -1,2 +1,4 @@
-scikit-image # to install skimage
-matplotlib
+numpy>=1.19.0
+matplotlib>=3.3.0
+scikit-image>=0.18.0
+Pillow>=8.0.0
